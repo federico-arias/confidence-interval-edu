@@ -107,6 +107,23 @@ Histogram.prototype.redraw = function (newData) {
         .transition()
         .attr( "width", this._setWidth.bind(this) )
         .attr('height', this._setHeight.bind(this) );
+
+    mean = this.group.selectAll('.mean-line')
+        .data([d3.mean(newData)]);
+
+    mean.enter()
+        .append('rect')
+            .attr('class', 'mean-line')
+            .attr('x', function(d) {return this.scaleX(d);}.bind(this))
+            .attr('y', 0)
+            .attr('width', 1)
+            .attr('height', this.scaleX.range.call(this)[1]);
+
+    mean.transition()
+        .attr('x', function (d) {
+                return this.scaleX(d);
+            }.bind(this));
+
 };
 
 Histogram.prototype._setWidth = function (d) {

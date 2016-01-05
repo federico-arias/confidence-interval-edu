@@ -1,3 +1,24 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8' />
+<style>
+body.cursor {
+    cursor:ew-resize;
+}
+html, 
+body{
+           height:100%;
+}
+#control {
+   cursor:ew-resize;
+   -moz-user-select:none;
+}
+</style>
+</head>
+<body lang='en'>
+<div id='control' style='width:55px;margin:20px 0 0 200px'>0</div>
+<script type='text/javascript'>
 
 var Control = function (elem, min, max, initialValue) {
     var r = elem.getBoundingClientRect();
@@ -13,7 +34,7 @@ var Control = function (elem, min, max, initialValue) {
     this.mouse = {};
     this.domain;
     this.value = initialValue;
-    this.elem.addEventListener('click', this.init.bind(this), false);
+    this.elem.addEventListener('mousedown', this.init.bind(this), false);
 };
 
 Control.prototype.init = function (e) {
@@ -26,28 +47,32 @@ Control.prototype.init = function (e) {
         this.mouse.initX = e.clientX;
         this.mouse.initY = e.clientY;
         this.isPressed = true;
-        document.addEventListener('mousemove', this.mousemove, false);
-        document.addEventListener('mouseup', this.release, false);
+        document.addEventListener('mousemove', this.mousemove.bind(this), false);
+        document.addEventListener('mouseup', this.release.bind(this), false);
         document.body.className = 'cursor';
     }
 };
 
 Control.prototype.release = function(e) {
     this.isPressed = false;
-    document.removeEventListener('mousemove');
-    document.removeEventListener('mouseup');
+    document.removeEventListener('mousemove', this.mousemove, false);
+    document.removeEventListener('mouseup', this.release, false);
     document.body.className = '';
     this.onchange(this.value);
 };
 
 Control.prototype.mousemove = function(e) {
+    if (this.isPressed) {
     var d = Math.abs(this.mouse.initX - e.clientX);
-    this.value = this.scale(d);
+    this.value = this.scale(d) > this.range.max ?
+        this.range.max
+        :parseInt(this.scale(d));
     this.elem.textContent = this.value;
+    }
 };
 
 Control.prototype.scale = function(diff) {
-    return (this.range.max - this.range.min) * (diff/this.domain) + this.range.max;
+    return (this.range.max - this.range.min) * (diff/this.domain) + this.range.min;
 };
 
 //module.exports = Control;
