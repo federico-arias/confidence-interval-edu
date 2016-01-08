@@ -1,6 +1,7 @@
 var d3 = require('d3');
 var Sampling = require('./sampling');
 var GraphFactory = require('./graphfactory');
+var Control = require('./control');
 
 heights = new Sampling( d3.range(500).map( d3.random.normal(170, 10) ) );
 

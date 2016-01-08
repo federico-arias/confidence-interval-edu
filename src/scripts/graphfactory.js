@@ -1,5 +1,6 @@
 var Histogram = require('./histogram');
 var Guarism = require('./guarism');
+var Lines = require('./lines');
 var Graph = require('./graph');
 //require = ('./meanLine.js');
 //require = ('./meanPlot.js');

@@ -42,7 +42,6 @@ Sampling.prototype = (function() {
         this.populationMean = d3.mean(this.population);
     };
 
-
     Public.plotSample = function(size,graph, name) {
         var sample = this._drawSample(size).addGraph(graph);
             sample.plot();

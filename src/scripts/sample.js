@@ -37,5 +37,4 @@ Sample.prototype.update = function (values) {
     }, this);
 };
 
-
 module.exports = Sample;

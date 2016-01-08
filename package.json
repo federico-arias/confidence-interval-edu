@@ -4,8 +4,8 @@
   "description": "An app to explain the concept of confidence intervals.",
   "main": "index.js",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/federico-arias/confidence-interval-edu"
+    "type": "git",
+    "url": "https://github.com/federico-arias/confidence-interval-edu"
   },
   "directories": {
     "test": "test"
@@ -29,6 +29,7 @@
     "karma-fixture": "^0.2.5",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.1",
+    "susy": "^2.2.10",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
