@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'/>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body lang='en'>
+<div id='log'>
+  
+</div>
+
+<svg width='800px' height='600px' id='svg'></svg>
+
+<script type='text/javascript'>
+
+var rect = document.getElementById('svg').getBoundingClientRect();
+var vals = d3.range(100).map( d3.random.normal(170, 10) );
+var extent = d3.extent(vals);
+var radius =8;
+var margin = 2;
+var nylevels = Math.floor(rect.height / (2 * radius + margin));
+//interval of vals, divisor of value to get ylevel
+var interval = (extent[1] - extent[0]) / nylevels;
+var bucket = {};
+
+var addXPos = function (data) {
+   return data.map(function(v, i, a) {
+        var rObj = {};
+        var ylevel = Math.floor(((v - extent[0])? v - extent[0]:1)/interval);
+        
+        if (typeof bucket[ylevel] === 'undefined') {
+            bucket[ylevel] = 0;
+        }
+        pos = ++bucket[ylevel];
+
+        rObj.y = v;
+        rObj.x = pos;
+        return rObj;
+    }, this);
+};
+
+function plot(data, g) {
+
+    var xDomain = typeof data[0].x !== 'undefined' ? 
+                  d3.extent(data.map(function(v) {return v.x}))[1]:
+                  data.length;
+
+    var x = d3.scale.linear()
+        .domain([0, xDomain])
+        .range([0, rect.width]);
+
+    var y = d3.scale.linear()
+        .domain(extent)
+        .range([rect.height,0]);    
+
+    if (typeof g === 'undefined') 
+        var g = d3.select('svg#svg').append('g').attr('class', 'hi');
+
+    var c = g.selectAll('circle')
+        .data(data)
+    
+    c.transition()
+        .attr('cx', function(d) {return x(d.x)});
+
+    c.enter().append('circle')
+        .attr('r', radius)
+        .attr('cx', function(d, i) {return x(i)})
+        .attr('cy', function(d, i) {return y(d)});
+
+    return g;
+}
+
+var group = plot(vals);
+
+setTimeout(function() {
+    plot(addXPos(vals), group);
+}, 5000);
+
+</script>
+</body>
+</html>
