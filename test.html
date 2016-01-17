@@ -60,6 +60,7 @@ function plot(data, g) {
         .data(data)
     
     c.transition()
+        .delay(
         .attr('cx', function(d) {return x(d.x)});
 
     c.enter().append('circle')
