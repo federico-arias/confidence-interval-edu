@@ -1,27 +1,31 @@
+
 <!doctype html>
 <html>
 <head>
 <meta charset='utf-8'/>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="Box2d.min.js"></script>
 </head>
 <body lang='en'>
 <div id='log'>
   
 </div>
 
-<svg width='800px' height='600px' id='svg'></svg>
+<svg width='400px' height='600px' id='svg'></svg>
 
 <script type='text/javascript'>
+'use strict';
 
 var rect = document.getElementById('svg').getBoundingClientRect();
-var vals = d3.range(100).map( d3.random.normal(170, 10) );
+var vals = d3.range(200).map( d3.random.normal(170, 10) );
 var extent = d3.extent(vals);
-var radius =8;
+var radius = 8;
 var margin = 2;
 var nylevels = Math.floor(rect.height / (2 * radius + margin));
 //interval of vals, divisor of value to get ylevel
 var interval = (extent[1] - extent[0]) / nylevels;
 var bucket = {};
+var i = 0;
 
 var addXPos = function (data) {
    return data.map(function(v, i, a) {
@@ -47,36 +51,143 @@ function plot(data, g) {
 
     var x = d3.scale.linear()
         .domain([0, xDomain])
-        .range([0, rect.width]);
+        .range([rect.height,0]);    
 
     var y = d3.scale.linear()
         .domain(extent)
-        .range([rect.height,0]);    
+        .range([10, rect.width - 10]);
 
     if (typeof g === 'undefined') 
         var g = d3.select('svg#svg').append('g').attr('class', 'hi');
 
     var c = g.selectAll('circle')
         .data(data)
+
+    var n = c.size();
+    var data2 = data.map(function(v,i,a) {return v.y});
+    var sd = d3.deviation(data2);
+    var m = d3.mean(data2);
+    var ci = function(percentage) {
+        if (percentage === 68)
+            return [m - sd, m + sd];
+        if (percentage === 95)
+            return [m - 2 * sd, m + 2 * sd];
+    };
+
+    /*
+    var ci = d3.scale.quantile()
+            .domain(ci95)
+            .range(['black', 'green','green','black']);
+            */
+    var ci = function(floating) {
+        if (floating < ci(95)[0] || floating > ci(95)[1]) {
+            window.i++;
+            return 'black';
+        }
+        return 'green';
+    };
+
+
     
     c.transition()
-        .delay(
-        .attr('cx', function(d) {return x(d.x)});
+        .delay(function(d, i) {return i/n * 2000;})
+        .attr('fill', function(d,i) { return ci(d.y);})
+        .attr('cy', function(d) {return x(d.x)});
 
     c.enter().append('circle')
         .attr('r', radius)
-        .attr('cx', function(d, i) {return x(i)})
-        .attr('cy', function(d, i) {return y(d)});
+        .attr('fill', 'green')
+        .attr('cy', function(d, i) {return x(i)})
+        .attr('cx', function(d, i) {return y(d)});
 
     return g;
 }
 
 var group = plot(vals);
 
-setTimeout(function() {
+/* setTimeout(function() {
     plot(addXPos(vals), group);
-}, 5000);
+}, 2000);
+*/
 
+var   b2Vec2 = Box2D.Common.Math.b2Vec2
+, b2BodyDef = Box2D.Dynamics.b2BodyDef
+, b2Body = Box2D.Dynamics.b2Body
+, b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+, b2Fixture = Box2D.Dynamics.b2Fixture
+, b2World = Box2D.Dynamics.b2World
+, b2MassData = Box2D.Collision.Shapes.b2MassData
+, b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+, b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+, b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+  ;
+
+var world = new b2World(
+     new b2Vec2(0, -10)    //gravity
+  ,  true                 //allow sleep
+);
+
+(function () {
+    var fixDef = new b2FixtureDef;
+    fixDef.density = 1.0;
+    fixDef.friction = 0.5;
+    fixDef.restitution = 0.2;      
+    fixDef.shape = new b2PolygonShape;
+    fixDef.shape.SetAsBox(200,1);
+
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_staticBody;
+
+    bodyDef.position.x = 200;
+    bodyDef.position.y = 2;
+
+    world.CreateBody(bodyDef).CreateFixture(fixDef);
+})();
+
+var setBody = function(x, y, id){
+    var fixDef = new b2FixtureDef;
+    fixDef.shape = new b2CircleShape(8);
+
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_dynamicBody;
+
+    bodyDef.position.x = x;
+    bodyDef.position.y = y;
+    bodyDef.userData = id;
+
+
+    world.CreateBody(bodyDef).CreateFixture(fixDef);
+}
+
+var css = document.querySelectorAll('circle');
+
+Array.prototype.forEach.call(css, function(v,i) {
+    setBody(parseFloat(v.getAttribute('cx')), parseFloat(v.getAttribute('cy')), i);
+}, css);
+
+
+        
+function animate () {
+
+
+   var a = world.GetBodyList();
+
+   while (typeof a !== 'undefined' && a !== null ) {
+       a.SetLinearVelocity(new b2Vec2(0, a.GetLinearVelocity().y));
+       if (a.GetUserData() != null) {
+           css[a.GetUserData()].setAttribute('cy', 600 - a.GetPosition().y);
+           css[a.GetUserData()].setAttribute('cx', a.GetPosition().x);
+       }
+       a = a.m_next; 
+   };
+
+   world.Step(1/25,10,10);
+
+    window.requestAnimationFrame(animate);
+};
+
+
+//window.requestAnimationFrame(animate);
 </script>
 </body>
 </html>

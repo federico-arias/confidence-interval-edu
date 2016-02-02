@@ -6,21 +6,17 @@
     </head>
     <body lang="en">
         <header>
-            <h1>Finding the mean height of a population</h1>
+            <h1>Parameter estimation</h1>
         </header>
         <article>
             <section>
-                <p>The purpose of this page is to teach you how to use a subset of a population to calculate a parameter from that same population.</p>
-
-                <p>Calculating a parameter from a population is a task we are often confronted with. We often want to know who a country is going to vote for president or what music do 17 years old listen to, but we don't have the money, nor the time to survey a whole country or every 17 year-old in the world.</p> 
-                <p>Let's take a sample of this population</p>
-                <p>Things are looking good so far. Our sample's mean is prety close to the mean of the population. But, how can we be sure that this is going always to be the case? n some cases the mean of our sample could be waaay below or above from the mean of our population. </p>
-                <p>Let's prove this by taking many samples from a distribution.</p>
+                <p>All alone in the night, left alone to ponder about the ultimate meaning of life, we all are confronted with the important questions: is Harry Styles really the sexiest One Direction member?, do 17 year old ladies prefer Prince Harry or the more daunting Prince Henry? The posibility of finding an answer seems far away. How are we ever going to find a definite answer to these questions if we are unable to survey the opinion of every 17 year old girl about the princes or of every directioner? (you cannot hastly reach to such a conclusion without empirically backed research, after all).</p>
+                <p>Well, fear not. There is a way to find some characteristic from a big population without surveying it in its entirety. What's that wizardy, you ask? Let me show you</p> 
+                <p>Suppose for a moment that you wanted to find the mean height of 500 people, but you were too lazy to ask their height to each and every one of them. What do you do? You only ask a couple of them. Let's say you ask 30 of them. This 30 people constitute a sample, that is, a portion of the total population from which you are estimating a parameter (in this case, the mean height).</p>
             </section>
-
             <div id='mean-from-sample' class='nl-box'>
                 <div>
-                    <p>If we take a sample of size <span class='ctrl'>20</span> from our population and we plot this histogram, our sample mean is <span class='highlight'></span>, pretty close to <span class='show'>30</span>, the population mean.</p>
+                    <p>If we take <span class='ctrl'>20</span> samples of size 30 from our population of 500, our sample mean is going to be<span class='highlight'></span>, pretty close to <span class='show'>170</span>, the population mean. Click on the samples to know the mean of every sample.</p>
                 </div>
                 <div>
                     <svg id='single' width='800px' height="600px"></svg>
@@ -30,14 +26,14 @@
                 Many samples 
             -->
             <section>
-                <h1>What happens when we are not so lucky?</h1>
-                <p>Can we be sure that our sample mean is always going to be close to the population mean? What if we only picked low values or high values from the population? If we take, let's say, 20 samples some, due to chance, might not be so close to the population parameter (which, in this case, is the mean). As figure 2 demonstrates, If we take a lot of samples, not all the means are close to the mean of the population.</p>
-                <p>We need to set an acceptable range of values in which we will consider the values close enough to the mean. This is called confidence interval. </p>
+                <h1>Confidence interval</h1>
+                <p>As we saw, if we took a sample of small size, we can get a fairly close estimation of the parameter. However, this is not always the case. Sometimes, due to chance, our sample might not be so close to our population parameter. Take, for instance, sample number 4, or sample number 10, which are far away from the population parameter.</p> 
+                <p>So, we must devise a way to warn the people to which we are communicating our findings that there is a possibility that our sample is not close to the population parameter. In order to be sincere, we say that most of our sample parameter are not going to be exactly the same as the population parameter, but it is going to be in a range of values close enought to it.</p> 
             </section>
 
             <div id='mean-from-sample' class='nl-box'>
                 <div>
-                    <p>From our samples, <span class='show'>25</span> of a total of 25 are close to the mean.</p>
+                    <p>From our samples, we can say that<span class='show'>95</span>% of them are in the interval (25 out of 30).</p>
                 </div>
                 <div>
                     <svg id='many' width='800px' height='1000px'></svg>
@@ -48,50 +44,44 @@
             <!--
                 Confidence level
             -->
+            <h1>Normally distributed samples</h1>
 
-            <div id='nl-box' id='confidence-level'>
+            <p>You can see that our prediction is fairly accurate. Our randomly generated samples are within our prediction. How did we figured out how that interval of values and that level of accurancy? Remember that if some values follow a normal distribution, we can predict how many of them are going to be within a given range. </p>
+
+            </section>
+
+            <div class='nl-box' id='confidence-level'>
                 <div>
-                <p>We can predict that from all the means (<span class='show'></span>), <span class='ctrl'></span>% of them are within the range <span class='show-confidence-interval'></span>. 
-                </p>
+                    <svg></svg>
+                    <p>Using the normal curve, we can predict that from all the means (<span class='show'></span>), <span class='ctrl'></span>% of them are within the range <span class='show-confidence-interval'></span>.</p>
+                </div>
+                <div>
+                    <svg></svg>
+                    <p>Empirically, this is supported by our data, which shows that n out of m of the means (95% of them) are within two standard deviantions.
+                </div>
+            </div> 
+            <!--
+                Sampling distribution 
+            -->
+            <section>
+            <h1>The sampling problem</h1>
+            <p>Now everything is fine and dandy, but in order to do all this, we must know the standard distribution of the samples and their mean. </p>
+            <p>What use is all this knowledge if we</p>
+            </section>
+
+            <div class='nl-box'>
+                <div>
+                    <p>If we have a sample of size 30, and its population is, the 
                 </div>
                 <div>
                     <svg></svg>
                 </div>
-            </div> 
-            <!--
-                Normal distribution 
-            -->
-
-            <p>You can see that our prediction is fairly accurate. Our randomly generated samples are within our prediction. How did we figured out how that interval of values and that level of accurancy? Remember that if some values follow a normal distribution, we can predict how many of them are going to be within a given range. For example if we know the number of beers drinked by every US student last year, we could plot an histogram like this:</p>
-            <div id='nl-block'>
-                <svg id='histogram-beer'></svg>
-                <div>
-                    <p> In the US, <span class='ctrl-cl-beer'>% of students drinked between <span class='show-ci-beer'></span> beers.
-                </div>
-            </div>
-            <!--
-                Sampling distribution 
-            -->
-
-            <p>So, what is the group of normally distributed values from which we are going to pick an interval? The answer is: every sample mean. We can consider every sample mean as a data point and we can plot an histogram in the same way.</p>
-            </section>
-
-            <div id='nl-block'>
-                <div>
-                    <p>If we plot all the sample means, we get a normal curve with most values in the center and few in the ends of the graph.</p>
-                    <input type="range" id="slider-sample-size" min="20" max="100" value="80">
-                    <div id="display-sample-mean"></div>
-                </div>
-                <svg id='histogram-beer'></svg>
             </div>
 
 
-            <section id="sampling">
-                <p>For example, if we take 100 samples, we'll like to say that, at least 95% of them are going to be close to the population parameter. This is what is called the <b>confidence level</b>, which, in our case, we set to be 95%. This is determined by researchers depending on the level of accuracy they want to achieve.</p>
-            </section>
         </article>    
         <footer>
-            <p>This was an experiment </p>
+            <p>This was an experiment by Froebel Labs.</p>
         </footer>
         <script type="text/javascript" src="scripts/main.js"></script>
     </body>

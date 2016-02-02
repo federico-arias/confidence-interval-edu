@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset='utf-8'/>
+        <script src="Box2d.min.js"></script>
+    </head>
+    <body lang='en'>
+        <svg width='400px' height='800px'>
+            <circle id='test' r='8' cx='10' cy='10' fill='green'></circle>
+        </svg>
+        <script type='text/javascript'>
+
+var   b2Vec2 = Box2D.Common.Math.b2Vec2
+, b2BodyDef = Box2D.Dynamics.b2BodyDef
+, b2Body = Box2D.Dynamics.b2Body
+, b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+, b2Fixture = Box2D.Dynamics.b2Fixture
+, b2World = Box2D.Dynamics.b2World
+, b2MassData = Box2D.Collision.Shapes.b2MassData
+, b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+, b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+, b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+  ;
+
+var world = new b2World(
+     new b2Vec2(0, -10)    //gravity
+  ,  true                 //allow sleep
+);
+
+(function setStaticBody() {
+    var fixDef = new b2FixtureDef;
+    fixDef.density = 1.0;
+    fixDef.friction = 0.5;
+    fixDef.restitution = 0.2;      
+    fixDef.shape = new b2PolygonShape;
+    fixDef.shape.SetAsBox(200,100);
+
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_staticBody;
+
+    bodyDef.position.x = 200;
+    bodyDef.position.y = 0;
+
+    world.CreateBody(bodyDef).CreateFixture(fixDef);
+})();
+
+(function setBody(x, y, id){
+    var fixDef = new b2FixtureDef;
+    fixDef.shape = new b2CircleShape(0.4);
+
+    var bodyDef = new b2BodyDef;
+    bodyDef.type = b2Body.b2_dynamicBody;
+
+    bodyDef.position.x = x;
+    bodyDef.position.y = y;
+    bodyDef.userdata = id;
+
+
+    world.CreateBody(bodyDef).CreateFixture(fixDef);
+})(20, 800, 'hi');
+
+
+function animate() {
+    var elem = document.getElementById('test');
+    elem.setAttribute('cy', 800 - world.GetBodyList().GetPosition().y);
+    console.log(world.GetBodyList().GetPosition().y);
+    world.ClearForces();
+    world.Step( 1/25, 10, 10);
+
+    window.requestAnimationFrame(animate);
+
+}
+
+//window.requestAnimationFrame(animate);
+
+        </script>
+    </body>
+</html>
+    
