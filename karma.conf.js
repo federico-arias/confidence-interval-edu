@@ -31,6 +31,11 @@ module.exports = function(config) {
        'test/*.js': ['browserify']
     },
 
+	//babel transform for browserify
+	browserify: {
+		transform: [['babelify', {presets:['es2015']}]]
+	},
+
 
     // test results reporter to use
     // possible values: 'dots', 'progress'

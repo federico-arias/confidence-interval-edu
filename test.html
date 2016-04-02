@@ -35,7 +35,7 @@ var addXPos = function (data) {
         if (typeof bucket[ylevel] === 'undefined') {
             bucket[ylevel] = 0;
         }
-        pos = ++bucket[ylevel];
+        var pos = ++bucket[ylevel];
 
         rObj.y = v;
         rObj.x = pos;
@@ -63,40 +63,18 @@ function plot(data, g) {
     var c = g.selectAll('circle')
         .data(data)
 
-    var n = c.size();
-    var data2 = data.map(function(v,i,a) {return v.y});
-    var sd = d3.deviation(data2);
-    var m = d3.mean(data2);
-    var ci = function(percentage) {
-        if (percentage === 68)
-            return [m - sd, m + sd];
-        if (percentage === 95)
-            return [m - 2 * sd, m + 2 * sd];
-    };
-
-    /*
-    var ci = d3.scale.quantile()
-            .domain(ci95)
-            .range(['black', 'green','green','black']);
-            */
-    var ci = function(floating) {
-        if (floating < ci(95)[0] || floating > ci(95)[1]) {
-            window.i++;
-            return 'black';
-        }
-        return 'green';
-    };
-
-
-    
     c.transition()
         .delay(function(d, i) {return i/n * 2000;})
         .attr('fill', function(d,i) { return ci(d.y);})
         .attr('cy', function(d) {return x(d.x)});
 
+	var cs = d3.scale.threshold()
+		.domain([170 - 20, 170 + 20])
+		.range(['black','green','black']);
+
     c.enter().append('circle')
         .attr('r', radius)
-        .attr('fill', 'green')
+		.attr('fill', (v,i) => cs(v))
         .attr('cy', function(d, i) {return x(i)})
         .attr('cx', function(d, i) {return y(d)});
 
@@ -105,10 +83,10 @@ function plot(data, g) {
 
 var group = plot(vals);
 
-/* setTimeout(function() {
+setTimeout(function() {
     plot(addXPos(vals), group);
 }, 2000);
-*/
+
 
 var   b2Vec2 = Box2D.Common.Math.b2Vec2
 , b2BodyDef = Box2D.Dynamics.b2BodyDef
@@ -162,7 +140,7 @@ var setBody = function(x, y, id){
 var css = document.querySelectorAll('circle');
 
 Array.prototype.forEach.call(css, function(v,i) {
-    setBody(parseFloat(v.getAttribute('cx')), parseFloat(v.getAttribute('cy')), i);
+    setBody(parseFloat(v.getAttribute('cx')), parseFloat(600 - v.getAttribute('cy')), i);
 }, css);
 
 
@@ -176,7 +154,6 @@ function animate () {
        a.SetLinearVelocity(new b2Vec2(0, a.GetLinearVelocity().y));
        if (a.GetUserData() != null) {
            css[a.GetUserData()].setAttribute('cy', 600 - a.GetPosition().y);
-           css[a.GetUserData()].setAttribute('cx', a.GetPosition().x);
        }
        a = a.m_next; 
    };
@@ -187,7 +164,7 @@ function animate () {
 };
 
 
-//window.requestAnimationFrame(animate);
+setTimeout(function() {window.requestAnimationFrame(animate)}, 4000);
 </script>
 </body>
 </html>

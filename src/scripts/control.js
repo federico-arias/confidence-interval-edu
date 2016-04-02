@@ -1,4 +1,3 @@
-
 var Control = function (elem, min, max, initialValue) {
     var r = elem.getBoundingClientRect();
     this.elem = elem;
@@ -54,6 +53,3 @@ Control.prototype.scale = function(diff) {
 
 var domControl = document.getElementById('control');
 var testControl = new Control(domControl, 5, 10, 0);
-</script>
-</body>
-</html>

@@ -10,13 +10,14 @@
         </header>
         <article>
             <section>
-                <p>All alone in the night, left alone to ponder about the ultimate meaning of life, we all are confronted with the important questions: is Harry Styles really the sexiest One Direction member?, do 17 year old ladies prefer Prince Harry or the more daunting Prince Henry? The posibility of finding an answer seems far away. How are we ever going to find a definite answer to these questions if we are unable to survey the opinion of every 17 year old girl about the princes or of every directioner? (you cannot hastly reach to such a conclusion without empirically backed research, after all).</p>
-                <p>Well, fear not. There is a way to find some characteristic from a big population without surveying it in its entirety. What's that wizardy, you ask? Let me show you</p> 
+                <p>All alone in the night, left alone to ponder about the ultimate meaning of life, we all are confronted with the important questions: is Harry Styles really the sexiest One Direction member?, do 17 year old ladies prefer Prince Harry or the more daunting Prince Henry? The posibility of finding an answer seems far away. How are we ever going to find a definite answer to these vexing questions if we are unable to survey the opinion of every 17 year old girl about the princes or of every directioner? (you cannot hastly reach to such a conclusion without empirically backed research, after all).</p>
+                <p>Well, fear not. There is a way to find some characteristic from a big population without surveying it in its entirety. What's that wizardy, you ask? Let me show you.</p> 
                 <p>Suppose for a moment that you wanted to find the mean height of 500 people, but you were too lazy to ask their height to each and every one of them. What do you do? You only ask a couple of them. Let's say you ask 30 of them. This 30 people constitute a sample, that is, a portion of the total population from which you are estimating a parameter (in this case, the mean height).</p>
             </section>
             <div id='mean-from-sample' class='nl-box'>
                 <div>
-                    <p>If we take <span class='ctrl'>20</span> samples of size 30 from our population of 500, our sample mean is going to be<span class='highlight'></span>, pretty close to <span class='show'>170</span>, the population mean. Click on the samples to know the mean of every sample.</p>
+                    <p>If we take <span class='ctrl'>20</span> samples of size 30 from our population of 500, our sample mean is going to be<span class='highlight'></span>, pretty close to <span class='show'>170</span>, the population mean. </p>
+                    <p>Click on the samples to know the mean of every sample.</p>
                 </div>
                 <div>
                     <svg id='single' width='800px' height="600px"></svg>
@@ -28,12 +29,12 @@
             <section>
                 <h1>Confidence interval</h1>
                 <p>As we saw, if we took a sample of small size, we can get a fairly close estimation of the parameter. However, this is not always the case. Sometimes, due to chance, our sample might not be so close to our population parameter. Take, for instance, sample number 4, or sample number 10, which are far away from the population parameter.</p> 
-                <p>So, we must devise a way to warn the people to which we are communicating our findings that there is a possibility that our sample is not close to the population parameter. In order to be sincere, we say that most of our sample parameter are not going to be exactly the same as the population parameter, but it is going to be in a range of values close enought to it.</p> 
+                <p>But, we can observe that, from all the patterns that we took from the population, most of them are near and very few of them are away.</p>
             </section>
 
             <div id='mean-from-sample' class='nl-box'>
                 <div>
-                    <p>From our samples, we can say that<span class='show'>95</span>% of them are in the interval (25 out of 30).</p>
+                    <p>From our samples, we can say that<span class='show'>30</span> of them are between 120 and 160.</p>
                 </div>
                 <div>
                     <svg id='many' width='800px' height='1000px'></svg>
@@ -46,14 +47,13 @@
             -->
             <h1>Normally distributed samples</h1>
 
-            <p>You can see that our prediction is fairly accurate. Our randomly generated samples are within our prediction. How did we figured out how that interval of values and that level of accurancy? Remember that if some values follow a normal distribution, we can predict how many of them are going to be within a given range. </p>
-
+            <p>If you look again at the data, you'll realize that our randomly generated samples means are normally distributed. Since we can predict where in a given range normally distributed values are, we can predict that our values are going to be withing one standard deviation from the sampling mean.</p> 
             </section>
 
             <div class='nl-box' id='confidence-level'>
                 <div>
                     <svg></svg>
-                    <p>Using the normal curve, we can predict that from all the means (<span class='show'></span>), <span class='ctrl'></span>% of them are within the range <span class='show-confidence-interval'></span>.</p>
+                    <p>Using the normal curve with mean 170 and standard deviation of 10, we can predict that from all the means (<span class='show'></span>), <span class='ctrl'></span>% of them are within the range <span class='show-confidence-interval'></span>.</p>
                 </div>
                 <div>
                     <svg></svg>
@@ -71,13 +71,12 @@
 
             <div class='nl-box'>
                 <div>
-                    <p>If we have a sample of size 30, and its population is, the 
+                    <p>If we have a sample of size 30, and its population is, the </p>
                 </div>
                 <div>
                     <svg></svg>
                 </div>
             </div>
-
 
         </article>    
         <footer>
