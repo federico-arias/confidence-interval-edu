@@ -1,4 +1,5 @@
 var Sample  = require('../src/scripts/sample');
+var sample;
 
 describe('A sample', function() {
 

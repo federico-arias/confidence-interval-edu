@@ -1,9 +1,10 @@
+/// <reference path="../../typings/main.d.ts" />
 var d3 = require('d3');
-var Sampling = require('./sampling');
+var Sampling = require('./sampling.js');
 var GraphFactory = require('./graphfactory');
 var Control = require('./control');
 
-heights = new Sampling( d3.range(500).map( d3.random.normal(170, 10) ) );
+var heights = new Sampling( d3.range(500).map( d3.random.normal(170, 10) ) );
 
 var graph = new Array();
 

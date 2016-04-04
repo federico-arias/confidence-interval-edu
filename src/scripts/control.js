@@ -49,7 +49,7 @@ Control.prototype.scale = function(diff) {
     return (this.range.max - this.range.min) * (diff/this.domain) + this.range.max;
 };
 
-//module.exports = Control;
+module.exports = Control;
 
-var domControl = document.getElementById('control');
-var testControl = new Control(domControl, 5, 10, 0);
+//var domControl = document.getElementById('control');
+//var testControl = new Control(domControl, 5, 10, 0);
