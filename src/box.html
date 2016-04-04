@@ -162,7 +162,7 @@ var setBody = function(x, y, id){
 var css = document.querySelectorAll('circle');
 
 Array.prototype.forEach.call(css, function(v,i) {
-    setBody(parseFloat(v.getAttribute('cx')), parseFloat(v.getAttribute('cy')), i);
+    setBody(parseFloat(v.getAttribute('cx')), 600 - parseFloat(v.getAttribute('cy')), i);
 }, css);
 
 
@@ -187,7 +187,7 @@ function animate () {
 };
 
 
-//window.requestAnimationFrame(animate);
+window.requestAnimationFrame(animate);
 </script>
 </body>
 </html>

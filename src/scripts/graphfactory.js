@@ -2,6 +2,7 @@ var Histogram = require('./histogram');
 var Guarism = require('./guarism');
 var Lines = require('./lines');
 var Graph = require('./graph');
+var Spheres = require('./spheres');
 //require = ('./meanLine.js');
 //require = ('./meanPlot.js');
 
@@ -32,5 +33,6 @@ var GraphFactory = (function () {
 
 GraphFactory.registerGraph('Histogram', Histogram);
 GraphFactory.registerGraph('Guarism', Guarism);
+GraphFactory.registerGraph('Spheres', Spheres);
 
 module.exports = GraphFactory;

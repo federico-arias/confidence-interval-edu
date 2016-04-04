@@ -2,22 +2,15 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var babel = require('babelify');
+var tsify = require('tsify');
 //var Server = require('karma').Server;
  
-//build for testing
-gulp.task('build-test', function() {
-    //return browserify('./src/scripts/sampling.js', {standalone: 'sampling'})
-    return browserify('./src/scripts/main-test.js')
-        .bundle()
-        //Pass desired output filename to vinyl-source-stream
-        .pipe(source('main.js'))
-        // Start piping stream to tasks!
-        .pipe(gulp.dest('./dist/scripts/'));
-});
-
 //build for production (minify, etc.)
 gulp.task('scripts', function() {
-    return browserify('./src/scripts/main.js')
+    return browserify('./src/scripts/main.ts')
+		//.plugin(tsify, {moduleResolution: "node"})
+		.transform("babelify", {presets:["es2015"]})
         .bundle()
         //Pass desired output filename to vinyl-source-stream
         .pipe(source('main.js'))

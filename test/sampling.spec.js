@@ -1,4 +1,5 @@
 var Sampling = require('../src/scripts/sampling');
+var measurements, graph;
 
 describe('Sampling of many samples', function(){
     beforeEach(function(){
