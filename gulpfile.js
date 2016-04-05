@@ -9,8 +9,8 @@ var tsify = require('tsify');
 //build for production (minify, etc.)
 gulp.task('scripts', function() {
     return browserify('./src/scripts/main.ts')
-		//.plugin(tsify, {moduleResolution: "node"})
-		.transform("babelify", {presets:["es2015"]})
+		.plugin(tsify, {moduleResolution: "node", module:"commonjs", target:"es6"})
+		.transform("babelify", {presets:["es2015"], extensions:[".ts", ".js"]})
         .bundle()
         //Pass desired output filename to vinyl-source-stream
         .pipe(source('main.js'))
