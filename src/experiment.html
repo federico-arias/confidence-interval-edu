@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+  	svg {
+		width:600px;
+			  height:400px;
+	}
+  </style>
+</head>
+
+<body>
+  <script>
+    // Feel free to change or delete any of the code you see!
+    var w = 600; 
+    var h = 400;
+    var m = 20;
+    var vals = d3.range(100).map( d3.random.normal(170, 20));
+    var rectH = '40'
+    ;
+    var x = d3.scale.linear()
+			.domain(d3.extent(vals))
+			.range([0 + m, w - m]);
+    
+    var pox = d3.scale.quantile()
+    	.domain(d3.extent(vals))
+    	.range(step(d3.extent(vals), 10).map(d => x(d)));
+  
+    function count(a) {
+		var axe = {};
+		a.forEach ( (v,i,a) => 
+						 { 
+							 if (typeof axe[v] !== 'undefined') return; 
+							 axe[v] = a.reduce( (p, d, ix, arr) => {
+								 if(d == v) return p + 1; 
+								 return p;
+               }, 0) 
+						 });
+		return axe;
+		}
+    
+    var counts = count(vals.map(d=>pox(d)));
+
+    var y = d3.scale.linear()
+    	.domain(extent(count(vals.map(d => pox(d)))))
+    	.range([h - m, 0 + m]);
+    
+    function extent(obj) {
+      var max = 0; var min = 1;
+    	for (var v in obj) {
+        if (obj[v] > max) max = obj[v];
+        if (obj[v] < min) min = obj[v];
+      }
+      return [min, max];
+    }
+    
+    function step(n, size) {
+		var d = Math.floor((n[1] - n[0])/size);
+      var a = new Array();
+      a.push(n[0]);
+      for (var b = n[0];b < n[1];) {
+      	a.push(b = b + d);
+      }
+      return a;
+    }
+
+    d3.select("body").append('svg')
+    	.selectAll('rect')
+    		.data(vals)
+    		.enter()
+    		.append('rect')
+				.attr('x', '0')
+				.attr('y', '0')
+			.transition()
+			.delay(function(d, i) { return i * 200; })
+    			.attr('y', (d,i) => {--counts[pox(d)];return y(counts[pox(d)] + 1);})
+    			.attr('x', pox)
+			 	.attr('width', 10)
+				.attr('height',10);	
+
+  </script>
+</body>
+</html>
