@@ -1,31 +1,45 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="d3.js"></script>
   <style>
-  	svg {
-		width:600px;
-			  height:400px;
+	svg {
+	  font: 10px sans-serif;
 	}
+
+	.x-axis line,
+	.x-axis path {
+	  fill: none;
+	  stroke: #000;
+	  stroke-width: 1px;
+	}
+
   </style>
 </head>
 
 <body>
   <script>
-    // Feel free to change or delete any of the code you see!
-    var w = 600; 
-    var h = 400;
+    var w = 400; 
+    var h = 300;
     var m = 20;
-    var vals = d3.range(100).map( d3.random.normal(170, 20));
-    var rectH = '40'
-    ;
+    var vals = d3.range(100).map( d3.random.normal(170, 20) );
+    var rectH = '40';
+
     var x = d3.scale.linear()
 			.domain(d3.extent(vals))
-			.range([0 + m, w - m]);
+			.range([0 + m, w]);
     
     var pox = d3.scale.quantile()
     	.domain(d3.extent(vals))
     	.range(step(d3.extent(vals), 10).map(d => x(d)));
+
+	/*var pox = d3.scale.ordinal()
+		.domain(d3.extent(count(vals).map( d=> )
+		.rangeBands([0 + m, w - m]);
+		*/
+	var xAxis = d3.svg.axis()
+					.tickValues(step(d3.extent(vals), 13, true))
+					.scale(pox);
   
     function count(a) {
 		var axe = {};
@@ -40,7 +54,7 @@
 		return axe;
 		}
     
-    var counts = count(vals.map(d=>pox(d)));
+    //var counts = count(vals.map(d=>pox(d)));
 
     var y = d3.scale.linear()
     	.domain(extent(count(vals.map(d => pox(d)))))
@@ -55,29 +69,112 @@
       return [min, max];
     }
     
-    function step(n, size) {
+    function step(n, size, floor) {
 		var d = Math.floor((n[1] - n[0])/size);
       var a = new Array();
       a.push(n[0]);
       for (var b = n[0];b < n[1];) {
       	a.push(b = b + d);
       }
-      return a;
+	  if (floor)
+		  return a.map(Math.floor);
+	  return a;
     }
 
-    d3.select("body").append('svg')
+	var counter = {};
+
+	var vals = vals.map( (v,i) => ({id:i,val:v, ypos:null, mean:null}) );
+
+    var first = d3.select("body").append('svg')
+			.attr('width', (2*w + 2*m))
+			.attr('height', (2*h + 2*m))
     	.selectAll('rect')
-    		.data(vals)
+			.data(vals, x=>x.id)
     		.enter()
     		.append('rect')
+				.attr('class', 'histogram')
+				.attr('fill', 'green')
 				.attr('x', '0')
 				.attr('y', '0')
 			.transition()
-			.delay(function(d, i) { return i * 200; })
-    			.attr('y', (d,i) => {--counts[pox(d)];return y(counts[pox(d)] + 1);})
-    			.attr('x', pox)
-			 	.attr('width', 10)
-				.attr('height',10);	
+			//.delay(function(_, i) { return i * 200; })
+				.attr('y', d=> {if (typeof counter[pox(d.val)] == 'undefined') counter[pox(d.val)] = 0 ;return y(++counter[pox(d.val)]);})
+				.attr('x', d=>pox(d.val))
+			 	.attr('width', 13)
+				.attr('height',13);
+
+	d3.select('svg').selectAll('.histogram')
+				.on('mouseover', foo2)
+				.on('mouseout', bar);
+
+	function foo2(e) {
+		console.log('hi');
+	}	
+
+	function bar() {
+		console.log('bar');
+	}
+	
+	d3.select('svg').append('g').attr('class', 'x-axis')
+		.attr('transform', 'translate(0,' + h.toString() + ')')
+		.call(xAxis);
+
+    			//.attr('y', (d,i) => {--counts[pox(d)];return y(counts[pox(d)] + 1);})
+
+	vals = takeSample(vals, 10);
+	vals = setMean(vals);
+
+	function setMean(arr) {
+			return (arr.map( (v,i,a) => {return v.mean = (a.reduce( (p,d) => (p + d.val) , 0) / arr.length), v}));
+	}
+
+	function takeSample(vals, size) {	
+		var indexes = new Array;
+		var rand =  Math.floor(Math.random() * vals.length);
+
+		for (i=0;i<size;i++) {
+			while(indexes.indexOf(rand) != -1) {
+				rand = Math.floor(Math.random() * vals.length);
+				console.log(rand);
+			}
+			indexes.push(rand); 
+		}
+		return (vals.filter( v => indexes.some( d => d == v.id) ));
+	}
+
+function dupe(d, i) {
+	var node = d3.select(this).node();
+	var dup = d3.select(node.parentNode.appendChild(node.cloneNode(true)));
+
+	console.log(dup, "fooo");
+	dup.attr('fill-opacity', 1e-10)
+		.attr('fill', 'black')
+		.transition()
+		.duration(3000)
+		.attr('fill-opacity', 1)
+		//.attr('x', d=>d.mean)
+		.attr('y', 100);
+}
+
+//duplicates elements, then moves them to the other graph
+
+function foo() {
+	d3.select('svg')
+		.selectAll('rect')
+		.data(vals, d=>d.id)
+		.each(dupe);
+}
+
+d3.select('svg').selectAll('rect')
+	.data([170], x=>x*1000)
+	.enter()
+	.append('rect')
+	.attr('x', x)
+	.attr('y', '0')
+	.attr('width', '3')
+	.attr('fill-opacity', 0.4)
+	.attr('height', h )
+	.attr('fill', 'red');
 
   </script>
 </body>
